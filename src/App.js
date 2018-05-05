@@ -1,18 +1,55 @@
 import React, { Component } from 'react';
+import Snoowrap from 'snoowrap';
 import logo from './logo.svg';
 import './App.css';
 
+import Header from './Components/header';
+import ListContainer from './Components/list-container';
+
+/* Reddit oAuth */
+
+const userLoggedIn = new Snoowrap({
+  clientId: '',
+  clientSecret: '',
+  username: '',
+  password: ''
+});
+
+const anonUser = new Snoowrap({
+  userAgent: 'ReactJS client for reddit (by /u/doctorApes)',
+  clientId: '',
+  clientSecret: '',
+  /* PLACE ANONYMOUS AUTHENTICATION TOKEN HERE */
+  accessToken: ''
+});
+
 class App extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      data: []
+    };
+
+    this.getData();
+  }
+
+  getData(){
+    userLoggedIn.getHot().then(response => {
+      this.setState({
+        data: response
+      })
+    });
+    
+  }
+
   render() {
+    console.log(this.state.data);
+    //anonUser.getHot().map(post => post.title).then(console.log);
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Header />
+        <ListContainer data={this.state.data}/>
       </div>
     );
   }
