@@ -4,8 +4,10 @@ export default function Header() {
     
     return (
         <div className='header'>
-            {/*<div className='logo'><img src={Tape} alt='logo' height="66px" width="auto" /></div>*/}            
-            <div className='title'>Client For Reddit</div>
+            <i className="fa fa-reddit-alien" aria-hidden="true"></i>
+            <div className='title'>Dark Theme For Reddit</div>
+            <div className="clear"></div>
         </div>
+        
     )
 }

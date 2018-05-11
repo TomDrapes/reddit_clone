@@ -7,7 +7,8 @@ export default class ListContainer extends Component{
         super(props);
 
         this.state = {
-            posts: []
+            posts: [],
+            loading: true
         }
         
     }
@@ -17,10 +18,11 @@ export default class ListContainer extends Component{
 
         if(nextProps.data){
             this.setState({
-                posts: nextProps.data
+                posts: nextProps.data,
+                loading: false
             })
         }
-    }
+    }  
 
     render(){
         
@@ -32,12 +34,25 @@ export default class ListContainer extends Component{
         });
         
         return (
-            <div className='posts-box'>                 
-                <h2>REVIEWS</h2>
+            <div className="list-container">
+                <div className="menu">
+                        <ul className="list-inline">
+                            <li><a className='menu-tab' href="/hot">Hot</a></li>
+                            <li><a className='menu-tab' href="/top">Top</a></li>
+                            <li><a className='menu-tab' href="/new">New</a></li>
+                            <li><a className='menu-tab' href="/rising">Rising</a></li>
+                            <li><a className='menu-tab' href="/controversial">Controversial</a></li>
+                        </ul>
+                </div>
+                <div className='posts-box'>                                 
                     <div>
                         {posts}
+                        {/* Show spinner while waiting for posts to load */}
+                        {this.state.loading && <div className="spinner"><i className="fa fa-spinner fa-spin" ></i></div>}
+                        
                     </div>
+                </div>
             </div>
-        )        
+        )   
     }
 }
