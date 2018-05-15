@@ -13,7 +13,7 @@ This is my submission for the Tanda React Internship Challenge and was designed 
 **8:** Commenting.  
 
 ### How to run
-You can check out a working production build [here](www.tom-drapes.com/dark-theme-for-reddit) or alternatively you can clone this repository.  
+You can check out a working production build [here](http://www.tom-drapes.com/dark-theme-for-reddit) or alternatively you can clone this repository.  
 To run this on your local machine you will need to provide your own clientId, clientSecret and refreshToken in the file App.js.    
 
 
