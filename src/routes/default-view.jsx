@@ -12,9 +12,10 @@ class DefaultView extends Component {
           snoo: this.props.snoo,
           data: []
       };
-      console.log(props);
-      this.getData(props.location.pathname);
+      
+      this.getData(props.location.pathname);      
     }
+   
   
     getData(page){
         switch (page) {
@@ -42,7 +43,7 @@ class DefaultView extends Component {
                 })
               });
               break;
-            case 'controversial': this.state.snoo.getControversial().then(response => {
+            case '/controversial': this.state.snoo.getControversial().then(response => {
                 this.setState({
                   data: response
                 })
@@ -57,11 +58,11 @@ class DefaultView extends Component {
     }
   
     render() {
-      console.log(this.state.data);
+      
       return (
         <div className="App">
-          <Header />
-          <ListContainer data={this.state.data}/>
+          <Header/>          
+          <ListContainer data={this.state.data} snoo={this.state.snoo} />
         </div>
       );
     }

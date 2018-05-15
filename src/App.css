@@ -41,6 +41,7 @@ div.menu a{
   color: #e5dfc5;
 }
 
+/* LOADING */
 .spinner{
   margin-top: 30vh;
   text-align: center;  
@@ -50,6 +51,8 @@ div.menu a{
   color: #91c7a9;
   font-size: 68px;  
 }
+
+/* POSTS */
 .posts-box {
   clear: left;
   text-align: left;
@@ -59,40 +62,57 @@ div.menu a{
 
 .post {
   padding: 5px;
-  border: 1px solid black;
+  border: 1px solid black;  
   overflow: hidden;
 }
 
 .post-title {
-  width: fit-content;
+  width: auto;
   float: left;
 }
 .post-domain {
-  
   width: fit-content;
   font-size: 14px;
   color: #848375;
 }
 .post-thumb {
-  float: left;
-  width: 20%;
+  float: left;  
+  width: 15%;
+  padding-left: 20px;
   box-sizing: border-box;
+  overflow-y: hidden;
 }
-.post-description {
-  width: 80%;
-  float: left;
+.post-description {  
   padding-left: 10px;
+  float: left;  
   font-size: 18px;
   box-sizing: border-box;
+  width: 75%;
 }
-.post-votes {
+
+.post-votes-box{
   float: left;
-  line-height: 140px;
-  margin-left: 10px;
+  text-align: center;
+  width: 10%;
+  padding: 10px 0 10px 15px;
+}
+
+.post-votes {
+  text-align: center;
   font-size: 26px;
 }
 .thumb {
-  float: right;
+  float: left;  
+}
+
+.fa-question{
+  border: 2px solid #e5dfc5;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 140px;
+  font-size: 80px;
+  width: 140px;
+  height: 140px;
 }
 
 .tagline {
@@ -109,6 +129,19 @@ div.menu a{
   cursor: pointer;
   font-size: 26px;
   clear: both;
+}
+
+.fa-caret-up, .fa-caret-down {
+  font-size: 36px;  
+  cursor: pointer;
+}
+
+.fa-caret-up:hover, .fa-caret-down:hover, .expand-comment:hover {
+  opacity: 0.7;
+}
+
+.fa-caret-up:focus, .fa-caret-down:focus{
+  color: red;
 }
 
 .preview{  
@@ -143,7 +176,7 @@ li {
 }
 .comments-header {
   float: left;
-  margin: 5px;
+  padding: 10px;  
   width: 100%;
 }
 .comments-thumbnail{
@@ -169,6 +202,18 @@ li {
   max-height: 500px;
 }
 
+.text-field{
+  padding: 10px;
+  text-align: center;
+  color: black;
+}
+
+.no-comments{
+  height: 100vh;
+  background-color: #32302f;
+  padding: 10px;
+}
+
 .comments-list {
   clear: both;
 }
@@ -176,6 +221,17 @@ li {
 .comment {
   border: 1px solid black;
   padding: 10px;
+  overflow: hidden;
+}
+
+.comments-vote-box{
+  float: left;  
+  width: 5%;
+}
+
+.comments-content-box{
+  width: 95%;
+  float: left;    
 }
 
 .expand-comment{
@@ -195,6 +251,7 @@ li {
   color: lightslategray;
   cursor: pointer;
   font-size: 12px;
+  margin-right: 20px;
 }
 
 .comment-body {
@@ -203,6 +260,17 @@ li {
 
 .comment-child {
   margin-left: 20px;
+}
+
+.reply{
+  font-size: 12px;  
+  color: lightslategray;
+  cursor: pointer;
+}
+
+.text-field2 {
+  color: black;
+  padding-bottom: 10px;
 }
 
 .fa-twitter {

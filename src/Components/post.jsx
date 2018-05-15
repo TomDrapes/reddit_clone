@@ -1,20 +1,27 @@
 import React, { Component} from 'react';
 import { Link } from 'react-router-dom';
-import Logo from '../logo.svg';
-
 
 export default class Post extends Component { 
     constructor(props){
         super(props);
 
         this.state = {
+            snoo: this.props.snoo,
             data: this.props.data,
+            original_count: this.props.data.ups,
+            count: this.props.data.ups,
             thumbnail_available: false,
             preview_available: false,
             preview_image: false,
             preview_video: false,
-            preview_link: false
-        }     
+            preview_link: false,
+            up_arrow_color: '#e5dfc5',
+            down_arrow_color: '#e5dfc5'
+        } 
+        this.upVote = this.upVote.bind(this);
+        this.downVote = this.downVote.bind(this);
+        
+        
         this.viewPreview = this.viewPreview.bind(this);   
     }
 
@@ -63,27 +70,73 @@ export default class Post extends Component {
     }
     
     shareTwitter(){
-        window.open('https://twitter.com/share?url=news.com.au', 'twitter-popup', 'height=350,width=600');
+        window.open('https://twitter.com/share?url=' + document.URL, 'twitter-popup', 'height=350,width=600');
     }
     
-    shareFacebook(){
-        window.open('https://www.facebook.com/sharer/sharer.php?u=news.com.au', 'facebook-popup', 'height=350,width=600');
-        //window.open('https://www.facebook.com/sharer/sharer.php?u=' + document.URL, 'facebook-popup', 'height=350,width=600');
+    shareFacebook(){        
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + document.URL, 'facebook-popup', 'height=350,width=600');
     }
+
+    upVote(){ 
+        this.state.snoo.getSubmission(this.state.data.id).fetch().then(submission => {                        
+            return submission.upvote();            
+        });      
+        this.setState({
+            up_arrow_color: '#69d2e7',
+            down_arrow_color: '#e5dfc5'
+        })
+        this.refreshCount('up');
+    }
+
+    downVote(){        
+        this.state.snoo.getSubmission(this.state.data.id).fetch().then(submission => {            
+            return submission.downvote();          
+        }); 
+        this.setState({
+            up_arrow_color: '#e5dfc5',
+            down_arrow_color: '#f38630'
+        })           
+        this.refreshCount('down');
+    }
+
+    refreshCount(direction){
+        if(direction === 'up'){
+            this.setState({
+                count: this.state.original_count + 1
+            })
+        }else if(direction === 'down'){
+            this.setState({
+                count: this.state.original_count - 1
+            })
+        }             
+    }
+
 
     
     render() {
+        let count;
+        if(this.state.count > 1000){
+            count = (this.state.count/1000).toFixed(1) + 'k';
+        }else{
+            count = this.state.count
+        }
         
         return (
             <div className='post'>
-                <div className='post-thumb'>
-                    <div className="post-votes">{(this.state.data.ups/1000).toFixed(1)}k</div>
+                
+                <div className="post-votes-box">                    
+                    <i className="fa fa-caret-up" onClick={this.upVote} style={{color: this.state.up_arrow_color}}></i>            
+                    <div className="post-votes">{count}</div>
+                    <i className="fa fa-caret-down" onClick={this.downVote} style={{color: this.state.down_arrow_color}}></i>
+                </div>
+
+                <div className='post-thumb'>                       
                     {this.state.thumbnail_available ? 
                     <div className='thumb'><img src={this.state.data.thumbnail} alt='thumbnail' height='140px' width='140px' /></div>
                     :
-                    <div className='thumb'><img src={Logo} alt='thumbnail unavailable' height='140px' width='140px' /></div>}
-                    
+                    <div className='thumb'><i className="fa fa-question" aria-hidden="true" /></div>}
                 </div>
+
                 <div className='post-description'>
                     <div className='post-title'>{this.state.data.title}</div>
                     <div className='post-domain'>({this.state.data.domain})</div>        
@@ -91,12 +144,12 @@ export default class Post extends Component {
                     <p className='tagline'>submitted by <strong>{this.state.data.author.name}</strong> to <strong>{this.state.data.subreddit_name_prefixed}</strong></p>
                     <div className='tagline2'>                     
                         <ul className="post-links-list">                        
-                            <li><Link className='comments-link' to={`/comments/${this.state.data.id}`}>{this.state.data.num_comments} comments</Link></li>                          
+                            <li><Link className='comments-link' to={`./comments/${this.state.data.id}`}>{this.state.data.num_comments} comments</Link></li>                          
                             <li><i className="fa fa-twitter" aria-hidden="true" onClick={this.shareTwitter}></i></li>
                             <li><i className="fa fa-facebook" aria-hidden="true" onClick={this.shareFacebook}></i></li>                  
                         </ul>                     
                     </div>                                        
-                    {this.state.preview_available && <i class="fa fa-caret-square-o-right" aria-hidden="true" onClick={this.viewPreview}></i>}
+                    {this.state.preview_available && <i className="fa fa-caret-square-o-right" aria-hidden="true" onClick={this.viewPreview}></i>}
                     <div className="clear"></div>
                     {this.state.preview_image && <img className="preview" src={this.state.data.url} alt={this.state.data.title} />}
                     {this.state.preview_video && <div className="preview" dangerouslySetInnerHTML={{__html: this.state.data.media_embed.content}}></div>}

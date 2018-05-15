@@ -11,43 +11,68 @@ export default class CommentsView extends Component{
             snoo: this.props.snoo,
             data: {}                        
         }
+        this.submitComment = this.submitComment.bind(this);             
     }
 
     componentDidMount(){
-        this.state.snoo.getSubmission(this.state.id).expandReplies({limit: 3, depth: 1}).then((response) => {
+        this.state.snoo.getSubmission(this.state.id).expandReplies({limit: 3, depth: 1}).then((response) => {            
             this.setState({
                 data: response
             });
-            console.log(this.state.data);
+            
         });
     }
     
     shareTwitter(){
-        window.open('https://twitter.com/share?url=news.com.au', 'twitter-popup', 'height=350,width=600');
+        window.open('https://twitter.com/share?url=' + document.URL, 'twitter-popup', 'height=350,width=600');
     }
     
-    shareFacebook(){
-        window.open('https://www.facebook.com/sharer/sharer.php?u=news.com.au', 'facebook-popup', 'height=350,width=600');
-        //window.open('https://www.facebook.com/sharer/sharer.php?u=' + document.URL, 'facebook-popup', 'height=350,width=600');
+    shareFacebook(){       
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + document.URL, 'facebook-popup', 'height=350,width=600');
     }
     
+    submitComment(){
+        this.state.snoo.getSubmission(this.state.id).reply(document.getElementById("textArea").value);        
+        alert("Thankyou. Your comment has been posted.");
+        document.getElementById("textArea").value = "";    
+        
+    }
 
 
     render(){
         let comments;
         let post_hint;
-        if(this.state.data.hasOwnProperty('comments')) {            
-            console.log(this.state.data.comments);
-            comments = this.state.data.comments.map((data, index) => {
+        if(this.state.data.hasOwnProperty('comments')){ 
+            if(this.state.data.comments.length > 0){                          
                 
-                return(
-                    <Comment data={data} key={data.id} index={index} />                                                
-                );
-            });
-            post_hint = this.state.data.post_hint;
-        }else{            
-            comments = <div>loading...</div>;                
-            post_hint = 'loading';
+                comments = this.state.data.comments.map((data, index) => {
+                    
+                    return(
+                        <Comment data={data} key={data.id} index={index} snoo={this.state.snoo} />                                                
+                    );
+                });
+                
+                if(this.state.data.hasOwnProperty('post_hint')){
+                    post_hint = this.state.data.post_hint;
+                }else{
+                    post_hint = 'NA'
+                }
+            }else{
+                comments = <div className="no-comments">There are no comments to display.</div>;                
+                if(this.state.data.hasOwnProperty('post_hint')){
+                    post_hint = this.state.data.post_hint;
+                }else{
+                    post_hint = 'NA'
+                }
+            }
+            
+        }else{                        
+            comments = <div className="no-comments">There are no comments to display.</div>;                
+            if(this.state.data.hasOwnProperty('post_hint')){
+                post_hint = this.state.data.post_hint;
+            }else{
+                post_hint = 'NA'
+            }
         }
                 
         return this.state.data.hasOwnProperty("comments") ? (
@@ -63,10 +88,14 @@ export default class CommentsView extends Component{
                             <li><i className="fa fa-twitter" aria-hidden="true" onClick={this.shareTwitter}></i></li>
                             <li><i className="fa fa-facebook" aria-hidden="true" onClick={this.shareFacebook}></i></li>                  
                         </ul>
-                    </div>
+                    </div>                    
                     <div className="clear"></div>
                     {post_hint.includes("image") && <img className="comments-preview" src={this.state.data.url} alt={this.state.data.title} />}
                     {post_hint.includes("video") && <div className="comments-preview" dangerouslySetInnerHTML={{__html: this.state.data.media_embed.content}}></div>}
+                    <div className="text-field">
+                        <textarea id="textArea" rows="4" cols="50" placeholder="Leave a comment" />
+                        <br/><button className="submit-btn" onClick={this.submitComment}>Submit</button>                                        
+                    </div>
                 </div>
                 
                 <div className="comments-list">                    
